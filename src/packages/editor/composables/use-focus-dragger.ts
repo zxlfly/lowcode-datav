@@ -51,35 +51,56 @@ export default function useFocusDragger(
     // 选中的widget的left top信息
     const dragList = {} as DragList
     const mousemove = (e: MouseEvent) => {
+        // 事件绑定再document上面
         let { clientX, clientY } = e
+        // console.log(dragState)
 
         // 计算当前元素最新的left top 去线里面找，有对应的就显示
-        // 鼠标移动后 - 鼠标移动前 +left
+        // 鼠标移动后 - 鼠标移动前 + 拖动前的值 得到现在拖动中的值
         const left = clientX - dragState.startX + dragState.startLeft
         const top = clientY - dragState.startY + dragState.startTop
         // 距离参照物小于5像素就显示线
         let yline: number | undefined
         for (let i = 0, len = lines.y.length; i < len; i++) {
+            // top 记录的就是最近元素参考线位置，也就是距离画布顶部的距离
+            // 如果这个距离和现在拖动的实际位置差距在5内 就显示辅助线 并且吸附过去
+            // showTop此时widget期望的top位置
             const { top: t, showTop: s } = lines.y[i]
             if (Math.abs(t - top) < 5) {
                 yline = s
-                // 实现快速贴边
-                clientY = dragState.startY - dragState.startTop + t
+                // 实现快速贴边 需要在后续计算中让结果为s
+                // 鼠标偏移量clientY - dragState.startY + 原来初始的top 这是原来的计算方式
+                // 现在需要直接变为s 后续的代码不改动 这里就需要计算调整下
+                // 原来初始的top这个后面还会加这里不管 需要让clientY - dragState.startY计算后的结果加上原来初始的top 为s
+                // 所以这里补上一个dragState.startY
+                // t - dragState.startTop 这个就是初始位置和辅助线位置的差值
+                // 然后原来初始的top 加上这个差值就是s
+                clientY = dragState.startY + t - dragState.startTop
                 break
             }
         }
         let xline: number | undefined
         for (let i = 0, len = lines.x.length; i < len; i++) {
+            // left 记录的就是最近元素参考线位置，也就是距离画布左边的距离
+            // 如果这个距离和现在拖动的实际位置差距在5内 就显示辅助线 并且吸附过去
+            // showLeft此时widget期望的left位置
             const { left: l, showLeft: s } = lines.x[i]
             if (Math.abs(l - left) < 5) {
                 xline = s
-                // 实现快速贴边
-                clientX = dragState.startX - dragState.startLeft + l
+                // 实现快速贴边 需要在后续计算中让结果为s
+                // 鼠标偏移量clientX - dragState.startX + 原来初始的left 这是原来的计算方式
+                // 现在需要直接变为s 后续的代码不改动 这里就需要计算调整下
+                // 原来初始的left这个后面还会加这里不管 需要让clientX - dragState.startX计算后的结果加上原来初始的left 为s
+                // 所以这里补上一个dragState.startX
+                // t - dragState.startLeft 这个就是初始位置和辅助线位置的差值
+                // 然后原来初始的left 加上这个差值就是s
+                clientX = dragState.startX + l - dragState.startLeft
                 break
             }
         }
         markLineX.value = xline
         markLineY.value = yline
+        // 鼠标的偏移量
         const x = clientX - dragState.startX
         const y = clientY - dragState.startY
         // widgetList.value.focus.forEach((widget: Widget, i: number) => {
@@ -138,7 +159,7 @@ export default function useFocusDragger(
                     height: blursHeight,
                 } = widget
                 // 拖拽元素top值为top时需要显示横线
-                // 线的位置showTop
+                // showTop此时widget的top位置
                 // 顶对顶
                 newLines.y.push({ showTop: blursTop, top: blursTop })
                 // 顶对底
@@ -190,7 +211,7 @@ export default function useFocusDragger(
             })
             return newLines
         })()
-        console.log("newLines", lines)
+        // console.log("newLines", lines)
 
         document.addEventListener("mousemove", mousemove)
         document.addEventListener("mouseup", mouseup)
