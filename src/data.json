@@ -1,0 +1,41 @@
+{
+    "container": {
+        "width": 500,
+        "height": 500
+    },
+    "widgets": [
+        {
+            "init": true,
+            "top": 100,
+            "left": 100,
+            "zIndex": 1,
+            "key": "text",
+            "focus": false,
+            "needAlignCenter": false,
+            "width": 10,
+            "height": 10
+        },
+        {
+            "init": true,
+            "top": 200,
+            "left": 200,
+            "zIndex": 1,
+            "key": "button",
+            "focus": false,
+            "needAlignCenter": false,
+            "width": 10,
+            "height": 10
+        },
+        {
+            "init": true,
+            "top": 300,
+            "left": 300,
+            "zIndex": 1,
+            "key": "input",
+            "focus": false,
+            "needAlignCenter": false,
+            "width": 10,
+            "height": 10
+        }
+    ]
+}

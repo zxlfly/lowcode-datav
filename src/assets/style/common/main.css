@@ -1,0 +1,6 @@
+@import "./base.css";
+@import "./variable.css";
+
+#app {
+    height: 100%;
+}

@@ -1,0 +1,130 @@
+.editor {
+    width: 100%;
+    height: 100%;
+    position: relative;
+
+    &-materials,
+    &-attrs {
+        position: absolute;
+        width: var(--z-editor-materials-width);
+        top: 0;
+        bottom: 0;
+    }
+
+    &-materials {
+        background-color: var(--z-editor-materials-bg-color);
+        left: 0;
+        overflow-y: auto;
+        padding-bottom: 20px;
+
+        &-item {
+            user-select: none;
+            position: relative;
+            height: 100px;
+            margin: 20px 10px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #fff;
+            border: 1px solid transparent;
+            transition: border 0.3s;
+
+            &-label {
+                position: absolute;
+                left: 0;
+                top: 0;
+                transition: all 0.3s;
+                background-color: rgb(11 153 144);
+                color: #fff;
+                padding: 3px 2px;
+                transform: translate(-1px, -1px);
+            }
+
+            &-cont {
+                position: relative;
+                z-index: 1;
+            }
+
+            &-after {
+                z-index: 2;
+                content: "";
+                display: block;
+                position: absolute;
+                inset: 0;
+                background: #ccc;
+                opacity: 0.3;
+                transition: all 0.3s;
+            }
+
+            &:hover {
+                border-color: rgb(11 153 144);
+                cursor: grab;
+            }
+
+            &:active {
+                cursor: grabbing;
+            }
+
+            &:hover &-after {
+                opacity: 0;
+            }
+        }
+    }
+
+    &-attrs {
+        background-color: var(--z-editor-attrs-bg-color);
+        right: 0;
+    }
+
+    &-actions {
+        position: absolute;
+        left: var(--z-editor-materials-width);
+        right: var(--z-editor-attrs-width);
+        top: 0;
+        height: var(--z-editor-actions-height);
+        background-color: var(--z-editor-actions-bg-color);
+    }
+
+    &-container {
+        box-sizing: border-box;
+        position: absolute;
+        inset: var(--z-editor-actions-height) var(--z-editor-attrs-width) 0
+            var(--z-editor-materials-width);
+        background: var(--z-editor-container-bg-color);
+        overflow: auto;
+        text-align: center;
+
+        &-canvas {
+            background-color: var(--z-editor-canvas-bg-color);
+            color: #000;
+            overflow: hidden;
+            margin: var(--z-editor-canvas-margin);
+            display: inline-block;
+            position: relative;
+
+            .editor-widget-focus {
+                &::after {
+                    content: "";
+                    display: block;
+                    position: absolute;
+                    inset: 0;
+                    border: 2px dotted #f00;
+                }
+            }
+
+            .mark-line-x {
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                border-left: 1px dashed red;
+            }
+
+            .mark-line-y {
+                position: absolute;
+                left: 0;
+                right: 0;
+                border-top: 1px dashed red;
+            }
+        }
+    }
+}

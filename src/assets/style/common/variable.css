@@ -1,0 +1,20 @@
+:root {
+    --z-editor-materials-width: 270px;
+    --z-editor-materials-bg-color: rgb(226 166 166);
+    --z-editor-attrs-width: 270px;
+    --z-editor-attrs-bg-color: rgb(200 237 78);
+    --z-editor-actions-height: 60px;
+    --z-editor-actions-bg-color: rgb(68 224 224);
+    --z-editor-container-bg-color: rgb(0 0 0);
+    --z-editor-canvas-bg-color: rgb(17 98 31);
+    --z-editor-canvas-margin: 15px;
+}
+
+html.dark {
+    --z-editor-materials-width: 270px;
+    --z-editor-materials-bg-color: red;
+    --z-editor-attrs-width: 270px;
+    --z-editor-attrs-bg-color: red;
+    --z-editor-actions-height: 60px;
+    --z-editor-actions-bg-color: red;
+}
