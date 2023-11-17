@@ -29,7 +29,8 @@ pnpm : 8.7.4
 ## 常规的操作功能
 所有的方法全部封装在useCommands里面  
 记录过程需要eventbus来派发事件，从而更新useCommands里面记录的操作记录  
-监听拖动的开始和结束事件来存储数据
+监听拖动的开始和结束事件来存储数据  
+```
 const state = {
     current: -1, //指针索引
     queue: [] as QueueItem[], //存放所有的操作指令，利用闭包存储这对应操作时的前后数据
@@ -37,4 +38,5 @@ const state = {
     commandArray: [] as Command[], //存放所有命令，处理需要初始化，和键盘事件会用到
     destroyArray: [] as Array<() => void>, //存储这清除副作用的函数，如绑定的事件
 }
+```
 通过register方法来注入命令，实际数据操作的方法就是在这处理
