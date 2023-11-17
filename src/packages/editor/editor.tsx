@@ -6,6 +6,7 @@ import EditorWidget from "../editor-widget/editor-widget"
 import useMenuDragHandle from "./composables/use-menu-drag-handle"
 import useFocus from "./composables/use-focus"
 import useFocusDragger from "./composables/use-focus-dragger"
+import useCommand from "./composables/use-commands"
 export default defineComponent({
     name: "Editor",
     directives: {},
@@ -44,6 +45,13 @@ export default defineComponent({
         const updateWidget = (val: Array<any>) => {
             data.value.widgets[val[1]] = val[0]
         }
+        const { commands } = useCommand(data)
+        const cancel = () => {
+            commands.undo()
+        }
+        const reset = () => {
+            commands.redo()
+        }
         return () => {
             return (
                 <div class="editor">
@@ -65,7 +73,14 @@ export default defineComponent({
                             </div>
                         ))}
                     </div>
-                    <div class="editor-actions">actions</div>
+                    <div class="editor-actions">
+                        <div onClick={cancel} class="editor-actions-btn">
+                            撤销
+                        </div>
+                        <div onClick={reset} class="editor-actions-btn">
+                            重做
+                        </div>
+                    </div>
                     <div class="editor-attrs">attrs</div>
                     <div class="editor-container">
                         <div

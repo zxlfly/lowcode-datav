@@ -1,3 +1,4 @@
+import { events } from "@/packages/eventbus"
 import { ref, type ComputedRef, type Ref, type WritableComputedRef } from "vue"
 interface DragList {
     [key: number | string]: {
@@ -40,6 +41,7 @@ export default function useFocusDragger(
         //拖动时widget的初始位置
         startLeft: 0,
         startTop: 0,
+        dragging: false,
     }
     // 最后选择widget 的宽高
     let lastSelect = {} as LastSelect
@@ -54,7 +56,11 @@ export default function useFocusDragger(
         // 事件绑定再document上面
         let { clientX, clientY } = e
         // console.log(dragState)
-
+        // 记录拖拽前的位置
+        if (!dragState.dragging) {
+            dragState.dragging = true
+            events.emit("start")
+        }
         // 计算当前元素最新的left top 去线里面找，有对应的就显示
         // 鼠标移动后 - 鼠标移动前 + 拖动前的值 得到现在拖动中的值
         const left = clientX - dragState.startX + dragState.startLeft
@@ -114,6 +120,11 @@ export default function useFocusDragger(
         })
     }
     const mouseup = () => {
+        // 记录拖拽前的位置
+        if (dragState.dragging) {
+            dragState.dragging = false
+            events.emit("end")
+        }
         document.removeEventListener("mousemove", mousemove)
         document.removeEventListener("mouseup", mouseup)
     }
@@ -139,6 +150,7 @@ export default function useFocusDragger(
             startY: e.clientY,
             startLeft: data.value.widgets[index].left,
             startTop: data.value.widgets[index].top,
+            dragging: false,
             // startList: widgetList.value.focus.map(({ top, left }) => ({
             //     top,
             //     left,

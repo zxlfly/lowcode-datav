@@ -1,3 +1,4 @@
+import { events } from "@/packages/eventbus"
 import type { Ref, WritableComputedRef } from "vue"
 let currentComp: RegisterCompConfig | null = null
 export default function useMenuDragHandle(
@@ -16,12 +17,16 @@ export default function useMenuDragHandle(
         canvasRef.value?.addEventListener("dragover", dragover)
         canvasRef.value?.addEventListener("dragleave", dragleave)
         canvasRef.value?.addEventListener("drop", drop)
+        // 发布start
+        events.emit("start")
     }
     const dragend = () => {
         canvasRef.value?.removeEventListener("dragenter", dragenter)
         canvasRef.value?.removeEventListener("dragover", dragover)
         canvasRef.value?.removeEventListener("dragleave", dragleave)
         canvasRef.value?.removeEventListener("drop", drop)
+        // 发布end
+        events.emit("end")
     }
     const dragenter = (e: DragEvent) => {
         e.dataTransfer!.dropEffect = "move"

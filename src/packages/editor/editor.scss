@@ -83,6 +83,19 @@
         top: 0;
         height: var(--z-editor-actions-height);
         background-color: var(--z-editor-actions-bg-color);
+        display: flex;
+        align-items: center;
+
+        &-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100px;
+            height: 30px;
+            margin-left: 50px;
+            cursor: pointer;
+            border: 1px solid #ddd;
+        }
     }
 
     &-container {
