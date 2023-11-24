@@ -5,7 +5,7 @@ import { EditorKey } from "./editor.type"
 import EditorWidget from "../editor-widget/editor-widget"
 import useMenuDragHandle from "./composables/use-menu-drag-handle"
 import useFocus from "./composables/use-focus"
-import useFocusDragger from "./composables/use-focus-dragger"
+import useWidgetDragger from "./composables/use-widget-dragger"
 import useCommand from "./composables/use-commands"
 export default defineComponent({
     name: "Editor",
@@ -35,12 +35,16 @@ export default defineComponent({
         const canvasRef = ref<HTMLDivElement | null>(null)
         const { dragStart, dragend } = useMenuDragHandle(canvasRef, data)
         // 选中操作，选中完成之后需要传入拖拽的回调来实现拖拽更新布局
-        const { clearWidgetFocus, widgetMouseDown, widgetList, focusList } =
-            useFocus(data, (e) => mousedown(e))
-        const { mousedown, markLineX, markLineY } = useFocusDragger(
+        const {
+            clearWidgetFocus,
+            widgetMouseDown,
+            widgetList,
+            lastSelectedWidget,
+        } = useFocus(data, (e) => mousedown(e))
+        const { mousedown, markLineX, markLineY } = useWidgetDragger(
             data,
             widgetList,
-            focusList,
+            lastSelectedWidget,
         )
         const updateWidget = (val: Array<any>) => {
             data.value.widgets[val[1]] = val[0]
@@ -109,13 +113,13 @@ export default defineComponent({
                                     )
                                 },
                             )}
-                            {markLineX.value !== undefined && (
+                            {markLineX.value !== null && (
                                 <div
                                     class="mark-line-x"
                                     style={{ left: markLineX.value + "px" }}
                                 ></div>
                             )}
-                            {markLineY.value !== undefined && (
+                            {markLineY.value !== null && (
                                 <div
                                     class="mark-line-y"
                                     style={{ top: markLineY.value + "px" }}

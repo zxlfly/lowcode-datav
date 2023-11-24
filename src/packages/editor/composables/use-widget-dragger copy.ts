@@ -26,13 +26,14 @@ interface Lines {
 //     top: number
 //     left: number
 // }
-export default function useFocusDragger(
+export default function useWidgetDragger(
     data: WritableComputedRef<EditorData>,
     widgetList: ComputedRef<{
         focus: Widgets
         blurs: Widgets
     }>,
     focusList: Ref<Set<number>>,
+    lastSelectedWidget: ComputedRef<Widget>,
 ) {
     let dragState = {
         //拖动时鼠标的初始位置
@@ -98,7 +99,7 @@ export default function useFocusDragger(
                 // 现在需要直接变为s 后续的代码不改动 这里就需要计算调整下
                 // 原来初始的left这个后面还会加这里不管 需要让clientX - dragState.startX计算后的结果加上原来初始的left 为s
                 // 所以这里补上一个dragState.startX
-                // t - dragState.startLeft 这个就是初始位置和辅助线位置的差值
+                // l - dragState.startLeft 这个就是初始位置和辅助线位置的差值
                 // 然后原来初始的left 加上这个差值就是s
                 clientX = dragState.startX + l - dragState.startLeft
                 break
@@ -142,6 +143,7 @@ export default function useFocusDragger(
                     widht: data.value.widgets[i].width,
                     height: data.value.widgets[i].height,
                 }
+                console.log("lastSelect", lastSelect)
             }
             index++
         })
@@ -171,7 +173,7 @@ export default function useFocusDragger(
                     height: blursHeight,
                 } = widget
                 // 拖拽元素top值为top时需要显示横线
-                // showTop此时widget的top位置
+                // showTop此时线的top位置
                 // 顶对顶
                 newLines.y.push({ showTop: blursTop, top: blursTop })
                 // 顶对底
@@ -221,6 +223,8 @@ export default function useFocusDragger(
                     left: blursLeft - lastSelect.widht,
                 })
             })
+            console.log("newLines", newLines)
+
             return newLines
         })()
         // console.log("newLines", lines)

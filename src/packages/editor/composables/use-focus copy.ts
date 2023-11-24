@@ -5,6 +5,7 @@ export default function useFocus(
     cb: (e: MouseEvent) => void,
 ) {
     // 记录选中的widget以及选择的顺序，后续辅助线功能需要
+    const focusList = ref<Set<number>>(new Set())
     const selectIndex = ref(-1)
     const lastSelectedWidget = computed(
         () => data.value.widgets[selectIndex.value],
@@ -19,9 +20,13 @@ export default function useFocus(
     })
 
     const clearWidgetFocus = () => {
-        widgetList.value.focus.forEach((widget) => {
-            widget.focus = false
+        // widgetList.value.focus.forEach((widget) => {
+        //     widget.focus = false
+        // })
+        focusList.value.forEach((i) => {
+            data.value.widgets[i].focus = false
         })
+        focusList.value.clear()
         selectIndex.value = -1
     }
 
@@ -29,17 +34,34 @@ export default function useFocus(
         e.stopPropagation()
         e.preventDefault()
         if (e.shiftKey) {
-            if (widgetList.value.focus.length <= 1) {
+            if (focusList.value.size <= 1) {
                 widget.focus = true
+                focusList.value.add(ind)
             } else {
-                widget.focus = !widget.focus
+                if (widget.focus) {
+                    widget.focus = false
+                    focusList.value.delete(ind)
+                } else {
+                    widget.focus = true
+                    focusList.value.add(ind)
+                }
             }
+            // if (widgetList.value.focus.length <= 1) {
+            //     widget.focus = true
+            // } else {
+            //     widget.focus = !widget.focus
+            // }
         } else {
             if (!widget.focus) {
                 clearWidgetFocus()
                 widget.focus = true
+                focusList.value.add(ind)
             }
+            // else {
+            //     widget.focus = false
+            // }
         }
+        // console.log("widgetList", widgetList.value)
         selectIndex.value = ind
         cb(e)
     }
@@ -47,6 +69,7 @@ export default function useFocus(
         clearWidgetFocus,
         widgetMouseDown,
         widgetList,
+        focusList,
         lastSelectedWidget,
     }
 }

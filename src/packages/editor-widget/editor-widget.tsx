@@ -28,18 +28,18 @@ export default defineComponent({
     emits: ["updateWidget"],
     setup(props, ctx) {
         const config = inject(EditorKey)
-        const blockRef = ref<HTMLDivElement | null>(null)
-        const blockStyle = computed(() => ({
+        const widgetRef = ref<HTMLDivElement | null>(null)
+        const widgetStyle = computed(() => ({
             top: props.widget.top + "px",
             left: props.widget.left + "px",
             zIndex: props.widget.zIndex,
         }))
         onMounted(() => {
-            if (blockRef.value === null) {
+            if (widgetRef.value === null) {
                 return
             }
             // 渲染之后通过元素对象获取宽高
-            const { offsetWidth, offsetHeight } = blockRef.value
+            const { offsetWidth, offsetHeight } = widgetRef.value
             if (props.widget.init) {
                 console.log("初始化渲染，更新宽高")
                 ctx.emit("updateWidget", [
@@ -52,7 +52,7 @@ export default defineComponent({
                     props.index,
                 ])
             } else if (props.widget.needAlignCenter) {
-                // 然组件渲染的时候以鼠标中心点为中心渲染
+                // 组件渲染的时候以鼠标中心点为中心渲染
                 ctx.emit("updateWidget", [
                     {
                         ...cloneDeep(props.widget),
@@ -71,9 +71,9 @@ export default defineComponent({
             const comp = config?.componentMap[props.widget.key]
             return (
                 <div
-                    ref={blockRef}
+                    ref={widgetRef}
                     class="editor-block"
-                    style={blockStyle.value}
+                    style={widgetStyle.value}
                 >
                     {comp.render()}
                 </div>
